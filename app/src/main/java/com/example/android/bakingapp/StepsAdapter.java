@@ -3,6 +3,7 @@ package com.example.android.bakingapp;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
         int layoutIdForListItem = R.layout.step_list_content;
         LayoutInflater inflater = LayoutInflater.from(context);
 
+        Log.i("TEST", "TEST");
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
 
         return new StepViewHolder(view);
