@@ -39,7 +39,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
         int layoutIdForListItem = R.layout.step_list_content;
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        Log.i("TEST", "TEST");
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
 
         return new StepViewHolder(view);
