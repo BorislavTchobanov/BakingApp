@@ -60,21 +60,21 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
     }
 
     class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView poster;
+        ImageView imageView;
         ProgressBar progressBar;
         final TextView mContentView;
 
         StepViewHolder(View itemView) {
             super(itemView);
 
-//            poster = itemView.findViewById(R.id.thumbnail_iv);
+            imageView = itemView.findViewById(R.id.person_photo);
 //            progressBar = itemView.findViewById(R.id.loading_indicator);
             itemView.setOnClickListener(this);
             mContentView = itemView.findViewById(R.id.content);
         }
 
         void setStepImage(final String imageUrl) {
-//            ImageHandler.loadImage(imageUrl, poster, progressBar);
+            ImageHandler.loadImage(imageUrl, imageView, progressBar);
         }
 
         @Override

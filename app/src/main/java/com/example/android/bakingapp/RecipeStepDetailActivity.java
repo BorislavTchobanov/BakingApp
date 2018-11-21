@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
-import com.example.android.bakingapp.model.Recipe;
-
-import java.io.Serializable;
-
-import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_RECIPE;
+import com.example.android.bakingapp.model.Step;
+import static com.example.android.bakingapp.StepDetailFragment.ARG_ITEM_ID;
 
 public class RecipeStepDetailActivity extends AppCompatActivity {
 
-    private Recipe recipe;
+    private Step step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +22,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        recipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
+        step = (Step) getIntent().getSerializableExtra(ARG_ITEM_ID);
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -36,17 +32,18 @@ public class RecipeStepDetailActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-//        if (savedInstanceState == null) {
-//            // Create the detail fragment and add it to the activity
-//            // using a fragment transaction.
-//            Bundle arguments = new Bundle();
-//            arguments.putSerializable(RecipeDetailFragment.ARG_ITEM_ID, (Serializable) recipe.getSteps());
-//            RecipeDetailFragment fragment = new RecipeDetailFragment();
-//            fragment.setArguments(arguments);
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.recipe_detail_container, fragment)
-//                    .commit();
-//        }
+        if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, step);
+            StepDetailFragment fragment = new StepDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.recipe_detail_container, fragment)
+                    .commit();
+        }
+
     }
 
     @Override
@@ -59,7 +56,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, RecipeListActivity.class));
+            navigateUpTo(new Intent(this, RecipeActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

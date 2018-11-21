@@ -6,16 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.util.DisplayMetrics;
 
-import com.example.android.bakingapp.dummy.DummyContent;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.utilities.JsonRecipeParser;
 import com.example.android.bakingapp.utilities.NetworkUtils;
@@ -34,7 +29,7 @@ import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_RECIPE;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RecipeListActivity extends AppCompatActivity implements RecipesAdapter.ListItemClickListener {
+public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.ListItemClickListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -42,12 +37,12 @@ public class RecipeListActivity extends AppCompatActivity implements RecipesAdap
      */
 
     private List<Recipe> recipeList;
-    private View recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_list);
+        setContentView(R.layout.activity_recipe);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,9 +57,21 @@ public class RecipeListActivity extends AppCompatActivity implements RecipesAdap
 //        }
 
         recyclerView = findViewById(R.id.recipe_list);
-        assert recyclerView != null;
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, calculateNoOfColumns(this));
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+//        assert recyclerView != null;
         new RecipeQueryTask().execute(NetworkUtils.buildUrl());
 
+    }
+
+    public static int calculateNoOfColumns(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int scalingFactor = 200;
+        int noOfColumns = (int) (dpWidth / scalingFactor);
+
+        return noOfColumns;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -81,15 +88,15 @@ public class RecipeListActivity extends AppCompatActivity implements RecipesAdap
 
 //        if (mTwoPane) {
 //            Bundle arguments = new Bundle();
-//            arguments.putSerializable(RecipeDetailFragment.ARG_ITEM_ID, recipe);
-//            RecipeDetailFragment fragment = new RecipeDetailFragment();
+//            arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, recipe);
+//            StepDetailFragment fragment = new StepDetailFragment();
 //            fragment.setArguments(arguments);
 //            getSupportFragmentManager().beginTransaction()
 //                    .replace(R.id.recipe_detail_container, fragment)
 //                    .commit();
 //        } else {
 //            Intent intent = new Intent(this, RecipeDetailActivity.class);
-//            intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, recipe);
+//            intent.putExtra(StepDetailFragment.ARG_ITEM_ID, recipe);
 //
 //            startActivity(intent);
 //        }

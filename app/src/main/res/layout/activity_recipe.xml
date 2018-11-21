@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".RecipeListActivity">
+    tools:context=".RecipeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -27,7 +27,15 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/recipe_list" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recipe_list"
+            android:name="com.example.android.bakingapp.RecipeListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            tools:context=".RecipeActivity"
+            tools:listitem="@layout/recipe_list_content" />
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
