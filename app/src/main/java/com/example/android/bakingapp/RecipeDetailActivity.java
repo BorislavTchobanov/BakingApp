@@ -21,6 +21,7 @@ import java.util.List;
 public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.ListItemClickListener {
 
     public static final String EXTRA_RECIPE = "extra_recipe";
+    public static final String CURRENT_STEP_INDEX = "current_step_index";
     private boolean mTwoPane;
     private Recipe recipe;
     private List<Step> stepList;
@@ -86,6 +87,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         if (mTwoPane) {
             Bundle arguments = new Bundle();
             arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, step);
+            arguments.putInt(CURRENT_STEP_INDEX, clickedItemIndex);
             StepDetailFragment fragment = new StepDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

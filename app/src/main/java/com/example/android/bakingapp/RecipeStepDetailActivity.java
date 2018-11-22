@@ -5,12 +5,19 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import com.example.android.bakingapp.model.Step;
-import static com.example.android.bakingapp.StepDetailFragment.ARG_ITEM_ID;
+import android.widget.Toast;
 
-public class RecipeStepDetailActivity extends AppCompatActivity {
+import com.example.android.bakingapp.model.Step;
+
+import static com.example.android.bakingapp.RecipeDetailActivity.CURRENT_STEP_INDEX;
+import static com.example.android.bakingapp.StepDetailFragment.ARG_ITEM_ID;
+import static com.example.android.bakingapp.StepDetailFragment.BUTTON_NEXT;
+import static com.example.android.bakingapp.StepDetailFragment.BUTTON_PREVIOUS;
+
+public class RecipeStepDetailActivity extends AppCompatActivity implements StepDetailFragment.OnNavButtonClickListener {
 
     private Step step;
+    private int stepIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +30,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         step = (Step) getIntent().getSerializableExtra(ARG_ITEM_ID);
+        stepIndex = getIntent().getIntExtra(CURRENT_STEP_INDEX, 0);
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -46,19 +54,31 @@ public class RecipeStepDetailActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == android.R.id.home) {
+//            // This ID represents the Home or Up button. In the case of this
+//            // activity, the Up button is shown. For
+//            // more details, see the Navigation pattern on Android Design:
+//            //
+//            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+//            //
+//            navigateUpTo(new Intent(this, RecipeActivity.class));
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, RecipeActivity.class));
-            return true;
+    public void onNavButtonClick(String tag) {
+        switch (tag) {
+            case BUTTON_PREVIOUS:
+                Toast.makeText(this, "PREV", Toast.LENGTH_SHORT).show();
+                break;
+            case BUTTON_NEXT:
+                Toast.makeText(this, "NEXT", Toast.LENGTH_SHORT).show();
+                break;
         }
-        return super.onOptionsItemSelected(item);
     }
 }
