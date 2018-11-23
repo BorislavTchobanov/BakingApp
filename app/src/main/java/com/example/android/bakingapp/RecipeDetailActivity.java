@@ -6,11 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
 
 import java.util.List;
+
+import static com.example.android.bakingapp.StepDetailFragment.BUTTON_NEXT;
+import static com.example.android.bakingapp.StepDetailFragment.BUTTON_PREVIOUS;
 
 /**
  * An activity representing a single Recipe detail screen. This
@@ -18,7 +22,7 @@ import java.util.List;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipeActivity}.
  */
-public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.ListItemClickListener {
+public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.ListItemClickListener, StepDetailFragment.OnNavButtonClickListener {
 
     public static final String EXTRA_RECIPE = "extra_recipe";
     public static final String CURRENT_STEP_INDEX = "current_step_index";
@@ -87,6 +91,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         if (mTwoPane) {
             Bundle arguments = new Bundle();
             arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, step);
+            arguments.putSerializable(EXTRA_RECIPE, recipe);
             arguments.putInt(CURRENT_STEP_INDEX, clickedItemIndex);
             StepDetailFragment fragment = new StepDetailFragment();
             fragment.setArguments(arguments);
@@ -96,6 +101,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         } else {
             Intent intent = new Intent(this, RecipeStepDetailActivity.class);
             intent.putExtra(StepDetailFragment.ARG_ITEM_ID, step);
+            intent.putExtra(EXTRA_RECIPE, recipe);
+            intent.putExtra(CURRENT_STEP_INDEX, clickedItemIndex);
 
             startActivity(intent);
         }
@@ -115,5 +122,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNavButtonClick(String tag) {
+        switch (tag) {
+            case BUTTON_PREVIOUS:
+                Toast.makeText(this, "Rec Det PREV", Toast.LENGTH_SHORT).show();
+                break;
+            case BUTTON_NEXT:
+                Toast.makeText(this, "Rec Det NEXT", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

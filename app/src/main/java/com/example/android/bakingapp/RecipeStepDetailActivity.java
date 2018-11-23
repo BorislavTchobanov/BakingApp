@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
 
 import static com.example.android.bakingapp.RecipeDetailActivity.CURRENT_STEP_INDEX;
+import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_RECIPE;
 import static com.example.android.bakingapp.StepDetailFragment.ARG_ITEM_ID;
 import static com.example.android.bakingapp.StepDetailFragment.BUTTON_NEXT;
 import static com.example.android.bakingapp.StepDetailFragment.BUTTON_PREVIOUS;
@@ -17,6 +19,7 @@ import static com.example.android.bakingapp.StepDetailFragment.BUTTON_PREVIOUS;
 public class RecipeStepDetailActivity extends AppCompatActivity implements StepDetailFragment.OnNavButtonClickListener {
 
     private Step step;
+    private Recipe recipe;
     private int stepIndex;
 
     @Override
@@ -30,6 +33,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements StepD
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         step = (Step) getIntent().getSerializableExtra(ARG_ITEM_ID);
+        recipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
         stepIndex = getIntent().getIntExtra(CURRENT_STEP_INDEX, 0);
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -74,10 +78,29 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements StepD
     public void onNavButtonClick(String tag) {
         switch (tag) {
             case BUTTON_PREVIOUS:
-                Toast.makeText(this, "PREV", Toast.LENGTH_SHORT).show();
+                stepIndex--;
+                Bundle arguments1 = new Bundle();
+                arguments1.putSerializable(StepDetailFragment.ARG_ITEM_ID, recipe.getSteps().get(stepIndex));
+                arguments1.putSerializable(EXTRA_RECIPE, recipe);
+                arguments1.putInt(CURRENT_STEP_INDEX, stepIndex);
+                StepDetailFragment fragment1 = new StepDetailFragment();
+                fragment1.setArguments(arguments1);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.recipe_detail_container, fragment1)
+                        .commit();
+
                 break;
             case BUTTON_NEXT:
-                Toast.makeText(this, "NEXT", Toast.LENGTH_SHORT).show();
+                stepIndex++;
+                Bundle arguments = new Bundle();
+                arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, recipe.getSteps().get(stepIndex));
+                arguments.putSerializable(EXTRA_RECIPE, recipe);
+                arguments.putInt(CURRENT_STEP_INDEX, stepIndex);
+                StepDetailFragment fragment = new StepDetailFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.recipe_detail_container, fragment)
+                        .commit();
                 break;
         }
     }
