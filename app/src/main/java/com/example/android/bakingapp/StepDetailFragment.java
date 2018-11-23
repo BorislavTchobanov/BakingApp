@@ -62,7 +62,7 @@ public class StepDetailFragment extends Fragment {
         Button buttonNext = rootView.findViewById(R.id.button_next);
         buttonPrevious.setTag(BUTTON_PREVIOUS);
         buttonNext.setTag(BUTTON_NEXT);
-        buttonPrevious.setOnClickListener(view -> mListener.onNavButtonClick(BUTTON_PREVIOUS));
+        buttonPrevious.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_PREVIOUS));
         buttonNext.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_NEXT));
 
         if (step != null) {
