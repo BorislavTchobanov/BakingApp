@@ -24,11 +24,15 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.HashMap;
+
+import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_TWO_PANE;
 
 public class StepDetailFragment extends Fragment {
 
@@ -38,9 +42,10 @@ public class StepDetailFragment extends Fragment {
 
     private Step step;
     private SimpleExoPlayer mExoPlayer;
-    private SimpleExoPlayerView simpleExoPlayerView;
+    private PlayerView simpleExoPlayerView;
     private ImageView thumbnailView;
     private OnNavButtonClickListener mListener;
+    private boolean mTwoPane;
 
     public interface OnNavButtonClickListener {
         void onNavButtonClick(String tag);
@@ -58,18 +63,20 @@ public class StepDetailFragment extends Fragment {
             step = (Step) getArguments().getSerializable(ARG_ITEM_ID);
         }
 
-        Button buttonPrevious = rootView.findViewById(R.id.button_prev);
-        Button buttonNext = rootView.findViewById(R.id.button_next);
-        buttonPrevious.setTag(BUTTON_PREVIOUS);
-        buttonNext.setTag(BUTTON_NEXT);
-        buttonPrevious.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_PREVIOUS));
-        buttonNext.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_NEXT));
+        if (!mTwoPane) {
+            Button buttonPrevious = rootView.findViewById(R.id.button_prev);
+            Button buttonNext = rootView.findViewById(R.id.button_next);
+            buttonPrevious.setTag(BUTTON_PREVIOUS);
+            buttonNext.setTag(BUTTON_NEXT);
+            buttonPrevious.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_PREVIOUS));
+            buttonNext.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_NEXT));
+        }
 
         if (step != null) {
             ((TextView) rootView.findViewById(R.id.instruction_slot)).setText(step.getShortDescription());
             thumbnailView = rootView.findViewById(R.id.media_slot);
             simpleExoPlayerView = rootView.findViewById(R.id.player_view);
-            simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
+//            simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
 
             if (!step.getVideoUrl().isEmpty()) {
                 initializePlayer(Uri.parse(step.getVideoUrl()));
@@ -91,6 +98,10 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (getArguments().containsKey(EXTRA_TWO_PANE)) {
+            mTwoPane = getArguments().getBoolean(EXTRA_TWO_PANE);
+        }
+        if (mTwoPane) return;
         try {
             mListener = (OnNavButtonClickListener) context;
         } catch (ClassCastException e) {
@@ -110,15 +121,16 @@ public class StepDetailFragment extends Fragment {
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity());
             simpleExoPlayerView.setPlayer(mExoPlayer);
             // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-            mExoPlayer.prepare(mediaSource);
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(),
+                    Util.getUserAgent(getActivity(), "BakingApp"));
+            // This is the MediaSource representing the media to be played.
+            MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaUri);
+            // Prepare the player with the source.
+            mExoPlayer.prepare(videoSource);
             mExoPlayer.setPlayWhenReady(true);
         }
     }

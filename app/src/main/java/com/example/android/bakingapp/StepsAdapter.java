@@ -3,17 +3,12 @@ package com.example.android.bakingapp;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
-import com.example.android.bakingapp.utilities.ImageHandler;
 
 import java.util.List;
 
@@ -45,10 +40,9 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StepViewHolder recipeViewHolder, int position) {
+    public void onBindViewHolder(@NonNull StepViewHolder stepViewHolder, int position) {
         final Step step = steps.get(position);
-        recipeViewHolder.setStepImage(step.getThumbnailUrl());
-        recipeViewHolder.mContentView.setText(steps.get(position).getShortDescription());
+        stepViewHolder.setStepText(position, step.getShortDescription());
     }
 
     @Override
@@ -60,21 +54,20 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
     }
 
     class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView imageView;
-        ProgressBar progressBar;
-        final TextView mContentView;
+        final TextView stepNumberTv;
+        final TextView shortDescriptionTv;
 
         StepViewHolder(View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.person_photo);
-//            progressBar = itemView.findViewById(R.id.loading_indicator);
             itemView.setOnClickListener(this);
-            mContentView = itemView.findViewById(R.id.content);
+            stepNumberTv = itemView.findViewById(R.id.step_number);
+            shortDescriptionTv = itemView.findViewById(R.id.step_short_description);
         }
 
-        void setStepImage(final String imageUrl) {
-            ImageHandler.loadImage(imageUrl, imageView, progressBar);
+        void setStepText(int position, final String text) {
+            stepNumberTv.setText(String.valueOf(position));
+            shortDescriptionTv.setText(text);
         }
 
         @Override

@@ -35,11 +35,11 @@ public class Ingredient implements Serializable {
         this.name = name;
     }
 
-    public String getIngredients() {
+    public String getMeasure() {
         return measure;
     }
 
-    public void setIngredients(String measure) {
+    public void setMeasure(String measure) {
         this.measure = measure;
     }
 

@@ -2,19 +2,21 @@ package com.example.android.bakingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
+import com.example.android.bakingapp.model.Ingredient;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
 
 import java.util.List;
-
-import static com.example.android.bakingapp.StepDetailFragment.BUTTON_NEXT;
-import static com.example.android.bakingapp.StepDetailFragment.BUTTON_PREVIOUS;
 
 /**
  * An activity representing a single Recipe detail screen. This
@@ -22,14 +24,17 @@ import static com.example.android.bakingapp.StepDetailFragment.BUTTON_PREVIOUS;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipeActivity}.
  */
-public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.ListItemClickListener, StepDetailFragment.OnNavButtonClickListener {
+public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.ListItemClickListener {
 
     public static final String EXTRA_RECIPE = "extra_recipe";
     public static final String CURRENT_STEP_INDEX = "current_step_index";
+    public static final String EXTRA_TWO_PANE = "extra_two_pane";
     private boolean mTwoPane;
     private Recipe recipe;
     private List<Step> stepList;
-    private RecyclerView recyclerView;
+    private RecyclerView stepsRecyclerView;
+    private List<Ingredient> ingredientList;
+    private RecyclerView ingredientsRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
 //        setSupportActionBar(toolbar);
 
+//        CollapsingToolbarLayout collapsingToolbar =
+//                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+//        collapsingToolbar.setTitle("Ingredients");
+//
+//        // Show the Up button in the action bar.
+//        ActionBar actionBar = getSupportActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//        }
+
+
+
         recipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
+        ingredientList = recipe.getIngredients();
         stepList = recipe.getSteps();
         if (findViewById(R.id.recipe_detail_container) != null) {
             // The detail container view will be present only in the
@@ -46,12 +64,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
-        }
-
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -75,8 +87,10 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
 //                    .commit();
 //        }
 
-        recyclerView = findViewById(R.id.step_list);
-        recyclerView.setAdapter(new StepsAdapter(stepList, this));
+        ingredientsRecyclerView = findViewById(R.id.ingredients_list);
+        ingredientsRecyclerView.setAdapter(new IngredientsAdapter(ingredientList));
+        stepsRecyclerView = findViewById(R.id.steps_list);
+        stepsRecyclerView.setAdapter(new StepsAdapter(stepList, this));
 
     }
 
@@ -93,6 +107,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
             arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, step);
             arguments.putSerializable(EXTRA_RECIPE, recipe);
             arguments.putInt(CURRENT_STEP_INDEX, clickedItemIndex);
+            arguments.putBoolean(EXTRA_TWO_PANE, mTwoPane);
             StepDetailFragment fragment = new StepDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -124,15 +139,4 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onNavButtonClick(String tag) {
-        switch (tag) {
-            case BUTTON_PREVIOUS:
-                Toast.makeText(this, "Rec Det PREV", Toast.LENGTH_SHORT).show();
-                break;
-            case BUTTON_NEXT:
-                Toast.makeText(this, "Rec Det NEXT", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
 }

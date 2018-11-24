@@ -68,7 +68,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
             imageView = itemView.findViewById(R.id.person_photo);
 //            progressBar = itemView.findViewById(R.id.loading_indicator);
             itemView.setOnClickListener(this);
-            mContentView = itemView.findViewById(R.id.content);
+            mContentView = itemView.findViewById(R.id.recipe_name);
         }
 
         void setRecipeImage(final String imageUrl) {
