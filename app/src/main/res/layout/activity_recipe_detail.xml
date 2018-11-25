@@ -10,120 +10,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:background="@android:color/white"
-        android:theme="@style/ThemeOverlay.AppCompat.Light">
+        android:theme="@style/IngredientsTheme">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
             app:collapsedTitleTextAppearance="@style/CollapsingToolbarLayoutCollapsedTextStyle"
+            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical">-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ingredients_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:minHeight="50dp"
+                android:padding="8dp"
+                android:theme="@style/IngredientsTheme"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
 
-
-            <!--<ImageView-->
-                <!--android:src="@drawable/temp_pic"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"-->
-                <!--app:layout_collapseMode="pin"-->
-                <!--android:layout_marginBottom="100dp"-->
-                <!--android:minHeight="100dp" />-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:padding="8dp"-->
-                <!--app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"-->
-                <!--app:layout_collapseMode="pin"-->
-                <!--android:minHeight="50dp"-->
-                <!--android:background="@android:color/white">-->
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/ingredients_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                    android:padding="8dp"
-                    app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-                    app:layout_collapseMode="pin"
-                    android:minHeight="50dp"
-                    android:background="@android:color/white"
-                    />
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways" />
-        <!--</LinearLayout>-->
-            <!--<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-                <!--android:id="@+id/card_view"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:minHeight="100dp"-->
-                <!--app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"-->
-                <!--app:layout_collapseMode="pin"-->
-                <!--android:layout_marginBottom="100dp"-->
-                <!--card_view:cardCornerRadius="4dp">-->
 
-                <!--<android.support.v7.widget.RecyclerView-->
-                    <!--android:id="@+id/ingredients_list"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="5dp"-->
-                    <!--android:minHeight="100dp"-->
-                    <!--app:layoutManager="android.support.v7.widget.LinearLayoutManager"-->
-                    <!--app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"-->
-                    <!--app:layout_collapseMode="pin"-->
-                    <!--android:layout_marginBottom="100dp" />-->
-            <!--</android.support.v7.widget.CardView>-->
-
-
-            <!--</LinearLayout>-->
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
-
-    <!--<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-    <!--android:id="@+id/card_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:layout_margin="5dp"-->
-    <!--card_view:cardCornerRadius="4dp"-->
-        <!--&gt;-->
-
-
-    <!--<android.support.v7.widget.RecyclerView-->
-    <!--android:id="@+id/ingredients_list"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:layoutManager="android.support.v7.widget.LinearLayoutManager"-->
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/steps_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="?attr/actionBarSize"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
