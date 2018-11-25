@@ -66,7 +66,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
         }
 
         void setStepText(int position, final String text) {
-            stepNumberTv.setText(String.valueOf(position));
+            String step = "Step: ";
+            stepNumberTv.setText(step.concat(String.valueOf(position)));
             shortDescriptionTv.setText(text);
         }
 

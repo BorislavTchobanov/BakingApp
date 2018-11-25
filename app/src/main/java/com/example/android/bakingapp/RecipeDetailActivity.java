@@ -45,10 +45,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         ingredientList = recipe.getIngredients();
         stepList = recipe.getSteps();
 
-        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(recipe.getName());
 
         mTwoPane = findViewById(R.id.recipe_detail_container) != null;
+
+        if (mTwoPane) {
+            Toolbar toolbar = findViewById(R.id.detail_toolbar);
+            setSupportActionBar(toolbar);
+            toolbar.setTitle(recipe.getName());
+        } else {
+            CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
+            collapsingToolbar.setTitle(recipe.getName());
+        }
 
         getContentResolver().delete(IngredientsContract.IngredientEntry.CONTENT_URI, null, null);
         ContentValues contentValues = new ContentValues();
