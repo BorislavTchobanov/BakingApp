@@ -46,6 +46,16 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/recipe_widget_provider_info" />
         </receiver>
+
+        <service android:name=".IngredientsUpdateService" />
+
+        <service android:name="StackWidgetService"
+        android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <provider
+            android:name=".provider.IngredientsContentProvider"
+            android:authorities="com.example.android.bakingapp"
+            android:exported="true" />
     </application>
 
 </manifest>

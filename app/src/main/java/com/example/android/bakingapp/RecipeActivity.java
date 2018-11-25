@@ -21,20 +21,7 @@ import java.util.List;
 
 import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_RECIPE;
 
-/**
- * An activity representing a list of Recipes. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RecipeDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.ListItemClickListener {
-
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
 
     private List<Recipe> recipeList;
     private RecyclerView recyclerView;

@@ -1,20 +1,20 @@
 package com.example.android.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.android.bakingapp.model.Ingredient;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
+import com.example.android.bakingapp.provider.IngredientsContract;
 
 import java.util.List;
 
@@ -40,31 +40,25 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-//        setSupportActionBar(toolbar);
-
-//        CollapsingToolbarLayout collapsingToolbar =
-//                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-//        collapsingToolbar.setTitle("Ingredients");
-//
-//        // Show the Up button in the action bar.
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//        }
-
-
 
         recipe = (Recipe) getIntent().getSerializableExtra(EXTRA_RECIPE);
         ingredientList = recipe.getIngredients();
         stepList = recipe.getSteps();
-        if (findViewById(R.id.recipe_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
+
+        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(recipe.getName());
+
+        mTwoPane = findViewById(R.id.recipe_detail_container) != null;
+
+        getContentResolver().delete(IngredientsContract.IngredientEntry.CONTENT_URI, null, null);
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i <ingredientList.size(); i++) {
+            contentValues.put(IngredientsContract.IngredientEntry.COLUMN_INGREDIENT_QUANTITY, ingredientList.get(i).getQuantity());
+            contentValues.put(IngredientsContract.IngredientEntry.COLUMN_INGREDIENT_MEASURE, ingredientList.get(i).getMeasure());
+            contentValues.put(IngredientsContract.IngredientEntry.COLUMN_INGREDIENT_NAME, ingredientList.get(i).getName());
+            getContentResolver().insert(IngredientsContract.IngredientEntry.CONTENT_URI, contentValues);
         }
+        IngredientsUpdateService.startActionUpdatePlantWidgets(this);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity

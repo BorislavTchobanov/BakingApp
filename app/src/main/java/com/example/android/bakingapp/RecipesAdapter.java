@@ -34,7 +34,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.recipe_list_content;
+        int layoutIdForListItem = R.layout.recipe_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
@@ -46,7 +46,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     public void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position) {
         final Recipe recipe = recipes.get(position);
         recipeViewHolder.setRecipeImage(recipe.getImage());
-        recipeViewHolder.mContentView.setText(recipes.get(position).getName());
+        recipeViewHolder.setRecipeName(recipe.getName());
+        recipeViewHolder.setNumOfServings(recipe.getServings());
     }
 
     @Override
@@ -58,21 +59,31 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     }
 
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView imageView;
-        ProgressBar progressBar;
-        final TextView mContentView;
+        private ImageView imageView;
+        private ProgressBar progressBar;
+        private TextView recipeNameTv;
+        private TextView numOfServingsTv;
 
         RecipeViewHolder(View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.person_photo);
+            imageView = itemView.findViewById(R.id.recipe_image);
 //            progressBar = itemView.findViewById(R.id.loading_indicator);
             itemView.setOnClickListener(this);
-            mContentView = itemView.findViewById(R.id.recipe_name);
+            recipeNameTv = itemView.findViewById(R.id.recipe_name);
+            numOfServingsTv = itemView.findViewById(R.id.recipe_num_of_servings);
         }
 
         void setRecipeImage(final String imageUrl) {
             ImageHandler.loadImage(imageUrl, imageView, progressBar);
+        }
+
+        void setRecipeName(String recipeName) {
+            recipeNameTv.setText(recipeName);
+        }
+
+        void setNumOfServings(int numOfServings) {
+            numOfServingsTv.setText(String.valueOf(numOfServings));
         }
 
         @Override

@@ -17,24 +17,24 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            />
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <!--<FrameLayout-->
+        <!--android:id="@+id/frameLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+        <!--&gt;-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recipe_list"
             android:name="com.example.android.bakingapp.RecipeListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-             />
-    </FrameLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <!--</FrameLayout>-->
 
 </android.support.design.widget.CoordinatorLayout>

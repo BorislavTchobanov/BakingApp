@@ -25,7 +25,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.ingredient_list_content;
+        int layoutIdForListItem = R.layout.ingredient_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
@@ -38,7 +38,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         final Ingredient ingredient = ingredients.get(position);
         ingredientViewHolder.setIngredientInfo(ingredient.getQuantity(), ingredient.getMeasure(), ingredient.getName());
 //        recipeViewHolder.setStepImage(ingredient.getThumbnailUrl());
-//        recipeViewHolder.mContentView.setText(ingredients.get(position).getShortDescription());
+//        recipeViewHolder.recipeNameTv.setText(ingredients.get(position).getShortDescription());
     }
 
     @Override
