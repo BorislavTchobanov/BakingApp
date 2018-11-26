@@ -10,8 +10,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
+import com.example.android.bakingapp.utilities.InternetCheck;
 import com.example.android.bakingapp.utilities.JsonRecipeParser;
 import com.example.android.bakingapp.utilities.NetworkUtils;
 
@@ -25,12 +29,17 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
 
     private List<Recipe> recipeList;
     private RecyclerView recyclerView;
+    private TextView errorNoInternetTv;
+    private Button errorNoInternetBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        errorNoInternetTv = findViewById(R.id.no_internet_error);
+        errorNoInternetBtn = findViewById(R.id.no_internet_error_btn);
+        errorNoInternetBtn.setOnClickListener(view -> retrieveRecipes());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -48,8 +57,29 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
         recyclerView.setLayoutManager(gridLayoutManager);
 
 //        assert recyclerView != null;
-        new RecipeQueryTask().execute(NetworkUtils.buildUrl());
+        retrieveRecipes();
 
+    }
+
+    private void retrieveRecipes() {
+        new InternetCheck((Boolean internet) -> {
+            if(internet) {
+                hideNoInternetConnectionError();
+                new RecipeQueryTask().execute(NetworkUtils.buildUrl());
+            } else {
+                showNoInternetConnectionError();
+            }
+        });
+    }
+
+    private void showNoInternetConnectionError() {
+        errorNoInternetTv.setVisibility(View.VISIBLE);
+        errorNoInternetBtn.setVisibility(View.VISIBLE);
+    }
+
+    private void hideNoInternetConnectionError() {
+        errorNoInternetTv.setVisibility(View.GONE);
+        errorNoInternetBtn.setVisibility(View.GONE);
     }
 
     public static int calculateNoOfColumns(Context context) {
@@ -72,21 +102,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
         Intent intent = new Intent(this, RecipeDetailActivity.class);
         intent.putExtra(EXTRA_RECIPE, recipe);
         startActivity(intent);
-
-//        if (mTwoPane) {
-//            Bundle arguments = new Bundle();
-//            arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, recipe);
-//            StepDetailFragment fragment = new StepDetailFragment();
-//            fragment.setArguments(arguments);
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.recipe_detail_container, fragment)
-//                    .commit();
-//        } else {
-//            Intent intent = new Intent(this, RecipeDetailActivity.class);
-//            intent.putExtra(StepDetailFragment.ARG_ITEM_ID, recipe);
-//
-//            startActivity(intent);
-//        }
     }
 
 

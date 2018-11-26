@@ -8,4 +8,6 @@
     <string name="empty_view_text">No recipe selected!</string>
     <string name="servings_label">Servings:</string>
     <string name="recipe_image_description">Recipe Image</string>
+    <string name="error_message_no_internet">No internet connection!</string>
+    <string name="try_again_button">Try Again</string>
 </resources>

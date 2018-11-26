@@ -7,14 +7,14 @@ import java.util.List;
 public class Ingredient implements Serializable {
 
     private int quantity;
-    private String name;
     private String measure;
+    private String name;
 
 
-    public Ingredient(int quantity, String name, String measure) {
+    public Ingredient(int quantity, String measure, String name) {
         this.quantity = quantity;
-        this.name = name;
         this.measure = measure;
+        this.name = name;
 
     }
 

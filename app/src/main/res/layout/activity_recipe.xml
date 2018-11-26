@@ -27,4 +27,28 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/no_internet_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/error_message_no_internet"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/no_internet_error_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/no_internet_error"
+            android:layout_centerHorizontal="true"
+            android:text="@string/try_again_button"
+            android:visibility="gone" />
+    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>

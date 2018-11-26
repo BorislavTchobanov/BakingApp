@@ -54,7 +54,7 @@ public class JsonRecipeParser {
                     ingredientName = jsonObjIngredient.getString("ingredient");
                     measure = jsonObjIngredient.getString("measure");
 
-                    ingredients.add(j, new Ingredient(quantity, ingredientName, measure));
+                    ingredients.add(j, new Ingredient(quantity, measure, ingredientName));
                 }
 
                 JSONArray jsonArraySteps = jsonObjRecipe.getJSONArray("steps");

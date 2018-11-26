@@ -35,7 +35,7 @@ public class JsonIngredientParser {
                 name = movieObj.getString("ingredient");
                 measure = movieObj.getString("measure");
 
-                ingredients.add(i, new Ingredient(quantity, name, measure));
+                ingredients.add(i, new Ingredient(quantity, measure, name));
             }
         } catch (JSONException e) {
             e.printStackTrace();
