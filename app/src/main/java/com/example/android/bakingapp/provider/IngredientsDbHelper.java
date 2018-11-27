@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.android.bakingapp.provider.IngredientsContract.IngredientEntry;
 
-public class IngredientsDbHelper extends SQLiteOpenHelper {
+class IngredientsDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ingredients.db";
     private static final int DATABASE_VERSION = 1;

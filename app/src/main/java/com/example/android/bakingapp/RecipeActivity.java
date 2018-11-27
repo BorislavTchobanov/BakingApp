@@ -72,7 +72,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
         errorNoInternetBtn.setVisibility(View.GONE);
     }
 
-    public static int calculateNoOfColumns(Context context) {
+    private static int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int scalingFactor = 200;
@@ -94,7 +94,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
     }
 
 
-    public class RecipeQueryTask extends AsyncTask<URL, Void, List<Recipe>> {
+    class RecipeQueryTask extends AsyncTask<URL, Void, List<Recipe>> {
 
         @Override
         protected void onPreExecute() {

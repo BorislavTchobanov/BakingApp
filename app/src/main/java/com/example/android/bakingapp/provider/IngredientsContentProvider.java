@@ -17,13 +17,12 @@ import static com.example.android.bakingapp.provider.IngredientsContract.*;
 
 public class IngredientsContentProvider extends ContentProvider {
 
-    public static final int INGREDIENTS = 100;
-    public static final int INGREDIENT_WITH_ID = 101;
+    private static final int INGREDIENTS = 100;
+    private static final int INGREDIENT_WITH_ID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private static final String TAG = IngredientsContentProvider.class.getName();
 
-    public static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(AUTHORITY, PATH_INGREDIENTS, INGREDIENTS);
         uriMatcher.addURI(AUTHORITY, PATH_INGREDIENTS + "/#", INGREDIENT_WITH_ID);
@@ -39,13 +38,6 @@ public class IngredientsContentProvider extends ContentProvider {
         return true;
     }
 
-    /***
-     * Handles requests to insert a single new row of data
-     *
-     * @param uri
-     * @param values
-     * @return
-     */
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         final SQLiteDatabase db = mIngredientsDbHelper.getWritableDatabase();
@@ -75,16 +67,6 @@ public class IngredientsContentProvider extends ContentProvider {
         return returnUri;
     }
 
-    /***
-     * Handles requests for data by URI
-     *
-     * @param uri
-     * @param projection
-     * @param selection
-     * @param selectionArgs
-     * @param sortOrder
-     * @return
-     */
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
@@ -129,14 +111,6 @@ public class IngredientsContentProvider extends ContentProvider {
         return retCursor;
     }
 
-    /***
-     * Deletes a single row of data
-     *
-     * @param uri
-     * @param selection
-     * @param selectionArgs
-     * @return number of rows affected
-     */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mIngredientsDbHelper.getWritableDatabase();
@@ -148,14 +122,6 @@ public class IngredientsContentProvider extends ContentProvider {
         return ingredientsDeleted;
     }
 
-    /***
-     * Updates a single row of data
-     *
-     * @param uri
-     * @param selection
-     * @param selectionArgs
-     * @return number of rows affected
-     */
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
@@ -177,7 +143,7 @@ public class IngredientsContentProvider extends ContentProvider {
                 // Append any existing selection options to the ID filter
                 if (selectionArgs == null) selectionArgs = new String[]{id};
                 else {
-                    ArrayList<String> selectionArgsList = new ArrayList<String>();
+                    ArrayList<String> selectionArgsList = new ArrayList<>();
                     selectionArgsList.addAll(Arrays.asList(selectionArgs));
                     selectionArgsList.add(id);
                     selectionArgs = selectionArgsList.toArray(new String[selectionArgsList.size()]);

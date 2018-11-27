@@ -16,7 +16,7 @@ import static com.example.android.bakingapp.provider.IngredientsContract.PATH_IN
 
 public class IngredientsUpdateService extends IntentService {
 
-    public static final String ACTION_UPDATE_INGREDIENTS_WIDGETS = "com.example.android.bakingapp.action.update_ingredients_widgets";
+    private static final String ACTION_UPDATE_INGREDIENTS_WIDGETS = "com.example.android.bakingapp.action.update_ingredients_widgets";
 
     public IngredientsUpdateService() {
         super("IngredientsUpdateService");

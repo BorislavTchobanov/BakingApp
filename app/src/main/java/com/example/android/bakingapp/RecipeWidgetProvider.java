@@ -40,8 +40,8 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int ingredientQuantity, String ingredientMeasure, String ingredientName, int appWidgetId) {
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                        int ingredientQuantity, String ingredientMeasure, String ingredientName, int appWidgetId) {
 
         RemoteViews rv = getIngredientsListRemoteView(context, ingredientQuantity, ingredientMeasure, ingredientName);
 

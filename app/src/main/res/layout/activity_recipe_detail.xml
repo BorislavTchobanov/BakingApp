@@ -17,8 +17,8 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:collapsedTitleTextAppearance="@style/CollapsingToolbarLayoutCollapsedTextStyle"
-            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <android.support.v7.widget.RecyclerView
@@ -26,8 +26,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:minHeight="50dp"
-                android:padding="8dp"
+                android:minHeight="@dimen/ingredients_list_min_height"
+                android:padding="@dimen/ingredients_list_padding"
                 android:theme="@style/IngredientsTheme"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_collapseMode="pin"
@@ -38,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways" />
-
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
