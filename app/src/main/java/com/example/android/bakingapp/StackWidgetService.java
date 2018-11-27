@@ -64,7 +64,7 @@ public class StackWidgetService extends RemoteViewsService {
 //        //Trigger data update to handle the GridView widgets and force a data refresh
 //        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
 //        //Now update all widgets
-//        RecipeWidgetProvider.updatePlantWidgets(this, appWidgetManager, ingredientId,appWidgetIds);
+//        RecipeWidgetProvider.updateIngredientsWidgets(this, appWidgetManager, ingredientId,appWidgetIds);
 //    }
 
 

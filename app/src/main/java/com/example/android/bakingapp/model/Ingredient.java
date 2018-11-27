@@ -2,7 +2,6 @@ package com.example.android.bakingapp.model;
 
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Ingredient implements Serializable {
 

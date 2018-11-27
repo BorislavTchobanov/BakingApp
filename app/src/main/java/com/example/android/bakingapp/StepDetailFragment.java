@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Step;
+import com.example.android.bakingapp.utilities.ImageHandler;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -28,13 +29,14 @@ import com.squareup.picasso.Picasso;
 import java.net.URLConnection;
 import java.util.HashMap;
 
-import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_AT_FIRST_STEP;
-import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_AT_LAST_STEP;
+import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_STEP;
 import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_TWO_PANE;
+import static com.example.android.bakingapp.RecipeStepDetailActivity.EXTRA_AT_FIRST_STEP;
+import static com.example.android.bakingapp.RecipeStepDetailActivity.EXTRA_AT_LAST_STEP;
 
 public class StepDetailFragment extends Fragment {
 
-    public static final String ARG_ITEM_ID = "item_id";
+
     public static final String BUTTON_PREVIOUS = "button_previous";
     public static final String BUTTON_NEXT = "button_next";
 
@@ -57,8 +59,8 @@ public class StepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.step_detail_view, container, false);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            step = (Step) getArguments().getSerializable(ARG_ITEM_ID);
+        if (getArguments().containsKey(EXTRA_STEP)) {
+            step = (Step) getArguments().getSerializable(EXTRA_STEP);
         }
 
         boolean isAtFirstStep = getArguments().getBoolean(EXTRA_AT_FIRST_STEP, false);
@@ -125,7 +127,7 @@ public class StepDetailFragment extends Fragment {
             thumbnailView.setVisibility(View.GONE);
             initializePlayer(Uri.parse(url));
         } else if (mimeType != null && mimeType.startsWith("image")) {
-            Picasso.get().load(url).into(thumbnailView);
+            ImageHandler.loadImage(url, thumbnailView);
         }
     }
 

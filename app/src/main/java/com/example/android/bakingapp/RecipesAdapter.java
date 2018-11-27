@@ -45,7 +45,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position) {
         final Recipe recipe = recipes.get(position);
-        recipeViewHolder.setRecipeImage(recipe.getImage());
+        recipeViewHolder.setRecipeImage(recipe.getImageUrl());
         recipeViewHolder.setRecipeName(recipe.getName());
         recipeViewHolder.setNumOfServings(recipe.getServings());
     }
@@ -60,7 +60,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageView;
-        private ProgressBar progressBar;
         private TextView recipeNameTv;
         private TextView numOfServingsTv;
 
@@ -68,14 +67,13 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
             super(itemView);
 
             imageView = itemView.findViewById(R.id.recipe_image);
-//            progressBar = itemView.findViewById(R.id.loading_indicator);
             itemView.setOnClickListener(this);
             recipeNameTv = itemView.findViewById(R.id.recipe_name);
             numOfServingsTv = itemView.findViewById(R.id.recipe_num_of_servings);
         }
 
         void setRecipeImage(final String imageUrl) {
-            ImageHandler.loadImage(imageUrl, imageView, progressBar);
+            ImageHandler.loadImage(imageUrl, imageView);
         }
 
         void setRecipeName(String recipeName) {

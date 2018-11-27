@@ -1,21 +1,5 @@
 package com.example.android.bakingapp.provider;
 
-/*
-* Copyright (C) 2017 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*  	http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -31,30 +15,21 @@ import java.util.Arrays;
 
 import static com.example.android.bakingapp.provider.IngredientsContract.*;
 
-
 public class IngredientsContentProvider extends ContentProvider {
 
-    // Define final integer constants for the directory of plants and a single item.
-    // It's convention to use 100, 200, 300, etc for directories,
-    // and related ints (101, 102, ..) for items in that directory.
     public static final int INGREDIENTS = 100;
     public static final int INGREDIENT_WITH_ID = 101;
 
-    // Declare a static variable for the Uri matcher that you construct
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final String TAG = IngredientsContentProvider.class.getName();
 
-    // Define a static buildUriMatcher method that associates URI's with their int match
     public static UriMatcher buildUriMatcher() {
-        // Initialize a UriMatcher
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        // Add URI matches
         uriMatcher.addURI(AUTHORITY, PATH_INGREDIENTS, INGREDIENTS);
         uriMatcher.addURI(AUTHORITY, PATH_INGREDIENTS + "/#", INGREDIENT_WITH_ID);
         return uriMatcher;
     }
 
-    // Member variable for a IngredientsDbHelper that's initialized in the onCreate() method
     private IngredientsDbHelper mIngredientsDbHelper;
 
     @Override
@@ -164,28 +139,12 @@ public class IngredientsContentProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        // Get access to the database and write URI matching code to recognize a single item
         final SQLiteDatabase db = mIngredientsDbHelper.getWritableDatabase();
-        int match = sUriMatcher.match(uri);
-        // Keep track of the number of deleted plants
         int ingredientsDeleted; // starts as 0
-//        switch (match) {
-//            // Handle the single item case, recognized by the ID included in the URI path
-//            case INGREDIENT_WITH_ID:
-//                // Get the plant ID from the URI path
-//                String id = uri.getPathSegments().get(1);
-//                // Use selections/selectionArgs to filter for this ID
-                ingredientsDeleted = db.delete(IngredientEntry.TABLE_NAME, "1", null);
-//                break;
-//            default:
-//                throw new UnsupportedOperationException("Unknown uri: " + uri);
-//        }
-        // Notify the resolver of a change and return the number of items deleted
+        ingredientsDeleted = db.delete(IngredientEntry.TABLE_NAME, "1", null);
         if (ingredientsDeleted != 0) {
-            // A plant (or more) was deleted, set notification
             getContext().getContentResolver().notifyChange(uri, null);
         }
-        // Return the number of plant deleted
         return ingredientsDeleted;
     }
 

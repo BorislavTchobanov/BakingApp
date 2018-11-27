@@ -2,7 +2,6 @@ package com.example.android.bakingapp.model;
 
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Step implements Serializable {
 
@@ -19,7 +18,6 @@ public class Step implements Serializable {
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
     }
-
 
     public int getId() {
         return id;

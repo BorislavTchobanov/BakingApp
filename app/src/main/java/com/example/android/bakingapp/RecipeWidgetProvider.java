@@ -6,11 +6,8 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -51,7 +48,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        IngredientsUpdateService.startActionUpdatePlantWidgets(context);
+        IngredientsUpdateService.startActionUpdateIngredientsWidgets(context);
         // There may be multiple widgets active, so update all of them
 //        for (int appWidgetId : appWidgetIds) {
 //            updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -96,8 +93,8 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-    public static void updatePlantWidgets(Context context, AppWidgetManager appWidgetManager,
-                                          int ingredientQuantity, String ingredientMeasure, String ingredientName, int[] appWidgetIds) {
+    public static void updateIngredientsWidgets(Context context, AppWidgetManager appWidgetManager,
+                                                int ingredientQuantity, String ingredientMeasure, String ingredientName, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, ingredientQuantity, ingredientMeasure, ingredientName, appWidgetId);
         }

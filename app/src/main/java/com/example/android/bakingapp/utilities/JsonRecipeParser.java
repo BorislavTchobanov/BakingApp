@@ -37,7 +37,7 @@ public class JsonRecipeParser {
         try {
             jsonArrayRecipe = new JSONArray(json);
             recipes = new ArrayList<>();
-            for(int i = 0; i < jsonArrayRecipe.length(); i++) {
+            for (int i = 0; i < jsonArrayRecipe.length(); i++) {
                 JSONObject jsonObjRecipe = jsonArrayRecipe.getJSONObject(i);
 
                 recipeId = jsonObjRecipe.getInt("id");

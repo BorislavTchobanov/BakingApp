@@ -40,30 +40,20 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
         errorNoInternetTv = findViewById(R.id.no_internet_error);
         errorNoInternetBtn = findViewById(R.id.no_internet_error_btn);
         errorNoInternetBtn.setOnClickListener(view -> retrieveRecipes());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-
-//        if (findViewById(R.id.recipe_detail_container) != null) {
-//            // The detail container view will be present only in the
-//            // large-screen layouts (res/values-w900dp).
-//            // If this view is present, then the
-//            // activity should be in two-pane mode.
-//            mTwoPane = true;
-//        }
 
         recyclerView = findViewById(R.id.recipe_list);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, calculateNoOfColumns(this));
         recyclerView.setLayoutManager(gridLayoutManager);
 
-//        assert recyclerView != null;
         retrieveRecipes();
-
     }
 
     private void retrieveRecipes() {
         new InternetCheck((Boolean internet) -> {
-            if(internet) {
+            if (internet) {
                 hideNoInternetConnectionError();
                 new RecipeQueryTask().execute(NetworkUtils.buildUrl());
             } else {
@@ -86,9 +76,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int scalingFactor = 200;
-        int noOfColumns = (int) (dpWidth / scalingFactor);
 
-        return noOfColumns;
+        return (int) (dpWidth / scalingFactor);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -130,9 +119,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipesAdapter.
             if (recipes == null) {
                 return;
             }
-//            populateView(recipes);
             recipeList = recipes;
-            setupRecyclerView((RecyclerView) recyclerView);
+            setupRecyclerView(recyclerView);
         }
     }
 }

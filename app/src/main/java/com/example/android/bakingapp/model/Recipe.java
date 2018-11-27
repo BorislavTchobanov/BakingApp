@@ -1,6 +1,5 @@
 package com.example.android.bakingapp.model;
 
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,15 +10,15 @@ public class Recipe implements Serializable {
     private List<Ingredient> ingredients;
     private List<Step> steps;
     private int servings;
-    private String image;
+    private String imageUrl;
 
-    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String image) {
+    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String imageUrl) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
         this.servings = servings;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
 
@@ -63,11 +62,11 @@ public class Recipe implements Serializable {
         this.servings = servings;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

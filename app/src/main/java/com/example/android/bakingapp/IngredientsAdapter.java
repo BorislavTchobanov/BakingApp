@@ -16,7 +16,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     private List<Ingredient> ingredients;
 
-    IngredientsAdapter(List<Ingredient> ingredients){
+    IngredientsAdapter(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -37,8 +37,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public void onBindViewHolder(@NonNull IngredientViewHolder ingredientViewHolder, int position) {
         final Ingredient ingredient = ingredients.get(position);
         ingredientViewHolder.setIngredientInfo(ingredient.getQuantity(), ingredient.getMeasure(), ingredient.getName());
-//        recipeViewHolder.setStepImage(ingredient.getThumbnailUrl());
-//        recipeViewHolder.recipeNameTv.setText(ingredients.get(position).getShortDescription());
     }
 
     @Override
@@ -67,14 +65,5 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             measureTv.setText(measure);
             ingredientTv.setText(ingredient);
         }
-//        void setStepImage(final String imageUrl) {
-//            ImageHandler.loadImage(imageUrl, imageView, progressBar);
-//        }
-
-//        @Override
-//        public void onClick(View view) {
-//            int clickedPosition = getAdapterPosition();
-//            mOnClickListener.onListItemClick(clickedPosition);
-//        }
     }
 }
