@@ -16,8 +16,8 @@ public class ImageHandler {
         }
         Picasso.get()
                 .load(imageUrl)
-                .placeholder(R.drawable.temp_pic)
-                .error(R.drawable.temp_pic)
+                .placeholder(R.drawable.no_image_available)
+                .error(R.drawable.no_image_available)
                 .into(imageView, new Callback() {
 
                     @Override

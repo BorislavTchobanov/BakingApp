@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -113,6 +114,8 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     private static RemoteViews getGardenGridRemoteView(Context context, int ingredientQuantity, String ingredientMeasure, String ingredientName) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_layout);
+
+        views.setTextViewText(R.id.recipe_name_tv, context.getString(R.string.widget_recipe_title));
         // Set the GridWidgetService intent to act as the adapter for the GridView
         Intent intent = new Intent(context, StackWidgetService.class);
         intent.putExtra(EXTRA_QUANTITY, ingredientQuantity);

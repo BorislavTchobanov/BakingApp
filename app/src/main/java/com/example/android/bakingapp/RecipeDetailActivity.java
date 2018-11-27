@@ -1,11 +1,10 @@
 package com.example.android.bakingapp;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +28,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
     public static final String EXTRA_RECIPE = "extra_recipe";
     public static final String CURRENT_STEP_INDEX = "current_step_index";
     public static final String EXTRA_TWO_PANE = "extra_two_pane";
+    public static final String EXTRA_AT_FIRST_STEP = "extra_at_first_step";
+    public static final String EXTRA_AT_LAST_STEP = "extra_at_last_step";
     private boolean mTwoPane;
     private Recipe recipe;
     private List<Step> stepList;
@@ -106,6 +107,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         if (mTwoPane) {
             Bundle arguments = new Bundle();
             arguments.putSerializable(StepDetailFragment.ARG_ITEM_ID, step);
+            arguments.putBoolean(EXTRA_AT_FIRST_STEP, (clickedItemIndex == 0));
+            arguments.putBoolean(EXTRA_AT_LAST_STEP, (clickedItemIndex == recipe.getSteps().size() - 1));
             arguments.putSerializable(EXTRA_RECIPE, recipe);
             arguments.putInt(CURRENT_STEP_INDEX, clickedItemIndex);
             arguments.putBoolean(EXTRA_TWO_PANE, mTwoPane);
@@ -116,7 +119,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
                     .commit();
         } else {
             Intent intent = new Intent(this, RecipeStepDetailActivity.class);
-            intent.putExtra(StepDetailFragment.ARG_ITEM_ID, step);
             intent.putExtra(EXTRA_RECIPE, recipe);
             intent.putExtra(CURRENT_STEP_INDEX, clickedItemIndex);
 

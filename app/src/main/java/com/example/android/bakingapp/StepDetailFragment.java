@@ -1,8 +1,8 @@
 package com.example.android.bakingapp;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,23 +15,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Step;
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
+import java.net.URLConnection;
 import java.util.HashMap;
 
+import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_AT_FIRST_STEP;
+import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_AT_LAST_STEP;
 import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_TWO_PANE;
 
 public class StepDetailFragment extends Fragment {
@@ -48,7 +46,7 @@ public class StepDetailFragment extends Fragment {
     private boolean mTwoPane;
 
     public interface OnNavButtonClickListener {
-        void onNavButtonClick(String tag);
+        void onStepNavButtonClick(String tag);
     }
 
     public StepDetailFragment() {
@@ -63,36 +61,72 @@ public class StepDetailFragment extends Fragment {
             step = (Step) getArguments().getSerializable(ARG_ITEM_ID);
         }
 
-        if (!mTwoPane) {
-            Button buttonPrevious = rootView.findViewById(R.id.button_prev);
-            Button buttonNext = rootView.findViewById(R.id.button_next);
-            buttonPrevious.setTag(BUTTON_PREVIOUS);
-            buttonNext.setTag(BUTTON_NEXT);
-            buttonPrevious.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_PREVIOUS));
-            buttonNext.setOnClickListener(it -> mListener.onNavButtonClick(BUTTON_NEXT));
-        }
+        boolean isAtFirstStep = getArguments().getBoolean(EXTRA_AT_FIRST_STEP, false);
+        boolean isAtLastStep = getArguments().getBoolean(EXTRA_AT_LAST_STEP, false);
 
-        if (step != null) {
-            ((TextView) rootView.findViewById(R.id.instruction_slot)).setText(step.getShortDescription());
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane) {
             thumbnailView = rootView.findViewById(R.id.media_slot);
             simpleExoPlayerView = rootView.findViewById(R.id.player_view);
-//            simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
 
             if (!step.getVideoUrl().isEmpty()) {
-                initializePlayer(Uri.parse(step.getVideoUrl()));
+                checkMediaType(step.getVideoUrl());
+            } else if (!step.getThumbnailUrl().isEmpty()) {
+                checkMediaType(step.getThumbnailUrl());
             } else {
                 simpleExoPlayerView.setVisibility(View.GONE);
+                Picasso.get().load(R.drawable.no_image_available).into(thumbnailView);
+            }
+        } else {
+            if (!mTwoPane) {
+                Button buttonPrevious = rootView.findViewById(R.id.button_prev);
+                Button buttonNext = rootView.findViewById(R.id.button_next);
+                buttonPrevious.setTag(BUTTON_PREVIOUS);
+                buttonNext.setTag(BUTTON_NEXT);
+                buttonPrevious.setOnClickListener((View it) -> {
+                    releasePlayer();
+                    mListener.onStepNavButtonClick(BUTTON_PREVIOUS);
+                });
+                buttonNext.setOnClickListener(it -> mListener.onStepNavButtonClick(BUTTON_NEXT));
+
+                if (isAtFirstStep) {
+                    buttonPrevious.setEnabled(false);
+                }
+                if (isAtLastStep) {
+                    buttonNext.setEnabled(false);
+                }
             }
 
-            if (!step.getThumbnailUrl().isEmpty()) {
-                Bitmap bitmap = createThumbnailFromUrl(step.getThumbnailUrl());
-                thumbnailView.setImageBitmap(bitmap);
-            } else {
-                thumbnailView.setVisibility(View.GONE);
+            if (step != null) {
+                ((TextView) rootView.findViewById(R.id.instruction_slot)).setText(step.getShortDescription());
+                thumbnailView = rootView.findViewById(R.id.media_slot);
+                simpleExoPlayerView = rootView.findViewById(R.id.player_view);
+
+                if (!step.getVideoUrl().isEmpty()) {
+                    checkMediaType(step.getVideoUrl());
+                } else if (!step.getThumbnailUrl().isEmpty()) {
+                    checkMediaType(step.getThumbnailUrl());
+                } else {
+                    simpleExoPlayerView.setVisibility(View.GONE);
+                    Picasso.get().load(R.drawable.no_image_available).into(thumbnailView);
+                }
+
             }
+
         }
 
         return rootView;
+    }
+
+    private void checkMediaType(String url) {
+        String mimeType = URLConnection.guessContentTypeFromName(url);
+
+        if (mimeType != null && mimeType.startsWith("video")) {
+            thumbnailView.setVisibility(View.GONE);
+            initializePlayer(Uri.parse(url));
+        } else if (mimeType != null && mimeType.startsWith("image")) {
+            Picasso.get().load(url).into(thumbnailView);
+        }
     }
 
     @Override
@@ -110,7 +144,7 @@ public class StepDetailFragment extends Fragment {
     }
 
 
-    public Bitmap createThumbnailFromUrl(String url){
+    public Bitmap createThumbnailFromUrl(String url) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(url, new HashMap<>());
         Bitmap image = retriever.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
@@ -150,6 +184,24 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        releasePlayer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
         releasePlayer();
     }
 

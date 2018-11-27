@@ -1,16 +1,26 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
-    android:padding="@dimen/widget_margin">
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/recipe_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"
+        style="@style/TextAppearance.AppCompat.Title" />
+
 
     <ListView
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:dividerHeight="1dp"
-        android:divider="#0eaeee" />
+        android:background="@color/colorPrimary"
+        />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/empty_view"
@@ -18,9 +28,9 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:background="@color/colorPrimary"
-        android:textColor="#ffffff"
+        android:textColor="@android:color/white"
         android:textStyle="bold"
         android:text="@string/empty_view_text"
         android:textSize="20sp" />
 
-</FrameLayout>
+</LinearLayout>

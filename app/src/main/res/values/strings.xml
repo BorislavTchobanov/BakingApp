@@ -10,4 +10,5 @@
     <string name="recipe_image_description">Recipe Image</string>
     <string name="error_message_no_internet">No internet connection!</string>
     <string name="try_again_button">Try Again</string>
+    <string name="widget_recipe_title">Last opened recipe - ingredients:</string>
 </resources>
