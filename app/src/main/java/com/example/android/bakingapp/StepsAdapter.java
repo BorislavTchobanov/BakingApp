@@ -21,7 +21,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
         void onListItemClick(int clickedItemIndex);
     }
 
-    StepsAdapter(List<Step> steps, ListItemClickListener listener){
+    StepsAdapter(List<Step> steps, ListItemClickListener listener) {
         mOnClickListener = listener;
         this.steps = steps;
     }

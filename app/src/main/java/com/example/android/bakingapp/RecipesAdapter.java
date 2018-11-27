@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
@@ -24,7 +23,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
         void onListItemClick(int clickedItemIndex);
     }
 
-    RecipesAdapter(List<Recipe> recipes, ListItemClickListener listener){
+    RecipesAdapter(List<Recipe> recipes, ListItemClickListener listener) {
         mOnClickListener = listener;
         this.recipes = recipes;
     }

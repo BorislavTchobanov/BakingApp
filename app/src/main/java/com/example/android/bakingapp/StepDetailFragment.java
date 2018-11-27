@@ -36,7 +36,6 @@ import static com.example.android.bakingapp.RecipeStepDetailActivity.EXTRA_AT_LA
 
 public class StepDetailFragment extends Fragment {
 
-
     public static final String BUTTON_PREVIOUS = "button_previous";
     public static final String BUTTON_NEXT = "button_next";
 
@@ -44,10 +43,10 @@ public class StepDetailFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private PlayerView simpleExoPlayerView;
     private ImageView thumbnailView;
-    private OnNavButtonClickListener mListener;
+    private OnStepNavButtonClickListener mListener;
     private boolean mTwoPane;
 
-    public interface OnNavButtonClickListener {
+    public interface OnStepNavButtonClickListener {
         void onStepNavButtonClick(String tag);
     }
 
@@ -59,65 +58,69 @@ public class StepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.step_detail_view, container, false);
 
+        assert getArguments() != null;
         if (getArguments().containsKey(EXTRA_STEP)) {
             step = (Step) getArguments().getSerializable(EXTRA_STEP);
         }
 
         boolean isAtFirstStep = getArguments().getBoolean(EXTRA_AT_FIRST_STEP, false);
         boolean isAtLastStep = getArguments().getBoolean(EXTRA_AT_LAST_STEP, false);
-
         int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane) {
+
+        if (step != null) {
+
             thumbnailView = rootView.findViewById(R.id.media_slot);
             simpleExoPlayerView = rootView.findViewById(R.id.player_view);
 
-            if (!step.getVideoUrl().isEmpty()) {
-                checkMediaType(step.getVideoUrl());
-            } else if (!step.getThumbnailUrl().isEmpty()) {
-                checkMediaType(step.getThumbnailUrl());
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane) {
+                setupMediaSection();
             } else {
-                simpleExoPlayerView.setVisibility(View.GONE);
-                Picasso.get().load(R.drawable.no_image_available).into(thumbnailView);
-            }
-        } else {
-            if (!mTwoPane) {
-                Button buttonPrevious = rootView.findViewById(R.id.button_prev);
-                Button buttonNext = rootView.findViewById(R.id.button_next);
-                buttonPrevious.setTag(BUTTON_PREVIOUS);
-                buttonNext.setTag(BUTTON_NEXT);
-                buttonPrevious.setOnClickListener((View it) -> {
-                    releasePlayer();
-                    mListener.onStepNavButtonClick(BUTTON_PREVIOUS);
-                });
-                buttonNext.setOnClickListener(it -> mListener.onStepNavButtonClick(BUTTON_NEXT));
-
-                if (isAtFirstStep) {
-                    buttonPrevious.setEnabled(false);
-                }
-                if (isAtLastStep) {
-                    buttonNext.setEnabled(false);
+                setupMediaSection();
+                setupInstructionSection(rootView);
+                if (!mTwoPane) {
+                    setupButtonSection(rootView, isAtFirstStep, isAtLastStep);
                 }
             }
-
-            if (step != null) {
-                ((TextView) rootView.findViewById(R.id.instruction_slot)).setText(step.getShortDescription());
-                thumbnailView = rootView.findViewById(R.id.media_slot);
-                simpleExoPlayerView = rootView.findViewById(R.id.player_view);
-
-                if (!step.getVideoUrl().isEmpty()) {
-                    checkMediaType(step.getVideoUrl());
-                } else if (!step.getThumbnailUrl().isEmpty()) {
-                    checkMediaType(step.getThumbnailUrl());
-                } else {
-                    simpleExoPlayerView.setVisibility(View.GONE);
-                    Picasso.get().load(R.drawable.no_image_available).into(thumbnailView);
-                }
-
-            }
-
         }
 
         return rootView;
+    }
+
+    private void setupMediaSection() {
+        if (!step.getVideoUrl().isEmpty()) {
+            checkMediaType(step.getVideoUrl());
+        } else if (!step.getThumbnailUrl().isEmpty()) {
+            checkMediaType(step.getThumbnailUrl());
+        } else {
+            simpleExoPlayerView.setVisibility(View.GONE);
+            Picasso.get().load(R.drawable.no_image_available).into(thumbnailView);
+        }
+    }
+
+    private void setupInstructionSection(View rootView) {
+        ((TextView) rootView.findViewById(R.id.instruction_slot)).setText(step.getShortDescription());
+    }
+
+    private void setupButtonSection(View rootView, boolean isAtFirstStep, boolean isAtLastStep) {
+        Button buttonPrevious = rootView.findViewById(R.id.button_prev);
+        Button buttonNext = rootView.findViewById(R.id.button_next);
+        buttonPrevious.setTag(BUTTON_PREVIOUS);
+        buttonNext.setTag(BUTTON_NEXT);
+        buttonPrevious.setOnClickListener((View it) -> {
+            releasePlayer();
+            mListener.onStepNavButtonClick(BUTTON_PREVIOUS);
+        });
+        buttonNext.setOnClickListener((View it) -> {
+            releasePlayer();
+            mListener.onStepNavButtonClick(BUTTON_NEXT);
+        });
+
+        if (isAtFirstStep) {
+            buttonPrevious.setEnabled(false);
+        }
+        if (isAtLastStep) {
+            buttonNext.setEnabled(false);
+        }
     }
 
     private void checkMediaType(String url) {
@@ -134,38 +137,33 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        assert getArguments() != null;
         if (getArguments().containsKey(EXTRA_TWO_PANE)) {
             mTwoPane = getArguments().getBoolean(EXTRA_TWO_PANE);
         }
         if (mTwoPane) return;
         try {
-            mListener = (OnNavButtonClickListener) context;
+            mListener = (OnStepNavButtonClickListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnNavButtonClickListener");
+            throw new ClassCastException(context.toString() + " must implement OnStepNavButtonClickListener");
         }
     }
-
 
     public Bitmap createThumbnailFromUrl(String url) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(url, new HashMap<>());
-        Bitmap image = retriever.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
 
-        return image;
+        return retriever.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
     }
 
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
-            // Create an instance of the ExoPlayer.
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity());
             simpleExoPlayerView.setPlayer(mExoPlayer);
-            // Prepare the MediaSource.
             DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(),
                     Util.getUserAgent(getActivity(), "BakingApp"));
-            // This is the MediaSource representing the media to be played.
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mediaUri);
-            // Prepare the player with the source.
             mExoPlayer.prepare(videoSource);
             mExoPlayer.setPlayWhenReady(true);
         }

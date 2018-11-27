@@ -12,7 +12,7 @@ import static com.example.android.bakingapp.RecipeDetailActivity.EXTRA_STEP;
 import static com.example.android.bakingapp.StepDetailFragment.BUTTON_NEXT;
 import static com.example.android.bakingapp.StepDetailFragment.BUTTON_PREVIOUS;
 
-public class RecipeStepDetailActivity extends AppCompatActivity implements StepDetailFragment.OnNavButtonClickListener {
+public class RecipeStepDetailActivity extends AppCompatActivity implements StepDetailFragment.OnStepNavButtonClickListener {
 
     public static final String EXTRA_AT_FIRST_STEP = "extra_at_first_step";
     public static final String EXTRA_AT_LAST_STEP = "extra_at_last_step";
@@ -30,13 +30,13 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements StepD
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.recipe_detail_container, buildFragmentNav(stepIndex))
+                    .add(R.id.recipe_detail_container, setupFragment(stepIndex))
                     .commit();
         }
 
     }
 
-    private Fragment buildFragmentNav(int index) {
+    private Fragment setupFragment(int index) {
         Bundle arguments = new Bundle();
         arguments.putSerializable(EXTRA_STEP, recipe.getSteps().get(index));
         arguments.putBoolean(EXTRA_AT_FIRST_STEP, (index == 0));
@@ -49,13 +49,12 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements StepD
 
     @Override
     public void onStepNavButtonClick(String tag) {
-
         switch (tag) {
             case BUTTON_PREVIOUS:
                 if (stepIndex > 0) {
                     stepIndex--;
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.recipe_detail_container, buildFragmentNav(stepIndex))
+                            .replace(R.id.recipe_detail_container, setupFragment(stepIndex))
                             .commit();
                 }
                 break;
@@ -63,7 +62,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements StepD
                 if (stepIndex < recipe.getSteps().size() - 1) {
                     stepIndex++;
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.recipe_detail_container, buildFragmentNav(stepIndex))
+                            .replace(R.id.recipe_detail_container, setupFragment(stepIndex))
                             .commit();
                 }
                 break;
