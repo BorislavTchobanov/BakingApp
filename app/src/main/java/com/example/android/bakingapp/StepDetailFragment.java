@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Step;
 import com.example.android.bakingapp.utilities.ImageHandler;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -38,9 +40,13 @@ public class StepDetailFragment extends Fragment {
 
     public static final String BUTTON_PREVIOUS = "button_previous";
     public static final String BUTTON_NEXT = "button_next";
+    private static final String RESUMED_POSITION = "resumed_position";
+    private static final String PLAYER_STATE = "player_state";
 
     private Step step;
     private SimpleExoPlayer mExoPlayer;
+    private long resumePosition;
+    private boolean shouldAutoPlay = false;
     private PlayerView simpleExoPlayerView;
     private ImageView thumbnailView;
     private OnStepNavButtonClickListener mListener;
@@ -63,6 +69,13 @@ public class StepDetailFragment extends Fragment {
             step = (Step) getArguments().getSerializable(EXTRA_STEP);
         }
 
+        resumePosition = C.TIME_UNSET;
+        shouldAutoPlay = true;
+        if (savedInstanceState != null) {
+            resumePosition = savedInstanceState.getLong(RESUMED_POSITION, C.TIME_UNSET);
+            shouldAutoPlay = savedInstanceState.getBoolean(PLAYER_STATE, false);
+        }
+
         boolean isAtFirstStep = getArguments().getBoolean(EXTRA_AT_FIRST_STEP, false);
         boolean isAtLastStep = getArguments().getBoolean(EXTRA_AT_LAST_STEP, false);
         int orientation = getResources().getConfiguration().orientation;
@@ -72,10 +85,7 @@ public class StepDetailFragment extends Fragment {
             thumbnailView = rootView.findViewById(R.id.media_slot);
             simpleExoPlayerView = rootView.findViewById(R.id.player_view);
 
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane) {
-                setupMediaSection();
-            } else {
-                setupMediaSection();
+            if (orientation != Configuration.ORIENTATION_LANDSCAPE || mTwoPane) {
                 setupInstructionSection(rootView);
                 if (!mTwoPane) {
                     setupButtonSection(rootView, isAtFirstStep, isAtLastStep);
@@ -84,6 +94,13 @@ public class StepDetailFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(RESUMED_POSITION, resumePosition);
+        outState.putBoolean(PLAYER_STATE, shouldAutoPlay);
     }
 
     private void setupMediaSection() {
@@ -165,16 +182,27 @@ public class StepDetailFragment extends Fragment {
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mediaUri);
             mExoPlayer.prepare(videoSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.setPlayWhenReady(shouldAutoPlay);
+
+            boolean haveResumePosition = resumePosition != C.INDEX_UNSET;
+            if (haveResumePosition) {
+                mExoPlayer.seekTo(resumePosition);
+            }
         }
     }
 
+    private void updateResumePosition() {
+        resumePosition = mExoPlayer.getContentPosition();
+    }
 
     /**
      * Release ExoPlayer.
      */
     private void releasePlayer() {
         if (mExoPlayer != null) {
+
+            shouldAutoPlay = mExoPlayer.getPlayWhenReady();
+            updateResumePosition();
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
@@ -205,4 +233,11 @@ public class StepDetailFragment extends Fragment {
         releasePlayer();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mExoPlayer == null) {
+            setupMediaSection();
+        }
+    }
 }
